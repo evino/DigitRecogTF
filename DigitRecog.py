@@ -22,6 +22,9 @@ test_images = test_images.reshape((test_images.shape[0], 28, 28, 1))
 print(train_images.shape)
 print(train_labels.shape)
 
+
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
 # Build Model
 model = models.Sequential([
     layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
@@ -47,19 +50,15 @@ print(f"Test accuracy: {test_acc}")
 
 
 # Select an image from the test set (e.g., the first image)
-batch_images = test_images[:5]
+# batch_images = test_images[:5]
 
-# Reshape the image if necessary (it should already be 28x28x1)
-# batch_images = batch_images.reshape((5, 28, 28, 1))  # Make it batch of 1
-batch_images = batch_images / 255.0
-
-# batch_images = batch_images.astype(np.float32)
-print(batch_images.shape)  # Should print (1, 28, 28, 1)
-print(batch_images.dtype)  # Should print float32 after normalization
+# # batch_images = batch_images.astype(np.float32)
+# print(batch_images.shape)  # Should print (1, 28, 28, 1)
+# print(batch_images.dtype)  # Should print float32 after normalization
 
 
 # Predict the label for this image
-predictions = model.predict(batch_images)
+predictions = model.predict(test_images[:5])
 
 # Print the raw predictions (probabilities for each class)
 print("Raw predictions for the first image:")
@@ -73,11 +72,11 @@ print("Predicted labels:", predicted_labels)
 
 # Optionally, display the images with the predicted labels
 for i in range(5):
-    plt.imshow(batch_images[i], cmap='gray')
+    plt.imshow(test_images[i], cmap='gray')
     plt.title(f"Label: {test_labels[i]}")
 
     # Save the image to a file
-    img_path = f'./test_image_{test_labels[i]}.png'
+    img_path = f'./predicted_image_{predicted_labels[i]}.png'
     plt.savefig(img_path)
 
     # Display in the browser
